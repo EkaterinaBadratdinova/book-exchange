@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://thymeleaf.org ">
+<head>
+    <meta charset="UTF-8">
+    <title>New person</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/people}" th:object="${person}">
+
+    <label for="surnameNamePatronymic">Enter your Surname Name Patronymic: </label>
+    <input type="text" th:field="*{surnameNamePatronymic}" id="surnameNamePatronymic"/>
+    <div style="color:red" th:if="${#fields.hasErrors('surnameNamePatronymic')}"
+         th:errors="*{surnameNamePatronymic}">Surname Name Patronymic Error</div>
+    <br/>
+
+    <label for="yearOdBirth">Enter your year of birth: </label>
+    <input type="text" th:field="*{yearOfBirth}" id="yearOdBirth"/>
+    <div style="color:red" th:if="${#fields.hasErrors('yearOfBirth')}"
+         th:errors="*{yearOfBirth}">Year of birth Error</div>
+    <br/>
+    <hr/>
+
+    <input type="submit" value="Create"/>
+
+</form>
+
+</body>
+</html>
