@@ -8,20 +8,22 @@
 </head>
 <body>
 
-<p th:text="${person.getSurnameNamePatronymic} + ', ' + ${person.getYearOfBirth()}">VALUE</p>
-<hr/>
+<p th:text="${person.getSurnameNamePatronymic()} + ', ' + ${person.getYearOfBirth()}">VALUE</p>
 
-<div th:if="${person.getBooks() == null}">
+<div th:if="${books.isEmpty()}">
     <p>The person hasn't taken any books yet</p>
 </div>
-<div th:if="${person.getBooks() != null}">
+<div th:if="${!books.isEmpty()}">
+    <hr/>
     <p>Books:</p>
     <ul>
-        <li th:each="book : ${person.getBooks()}">
-            <span th:text="${book.getTitle()} + ', ' + ${book.getAuthor() + ', ' + ${book.getYear()}"></span>
+        <li th:each="book : ${books}">
+            <span th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"></span>
         </li>
     </ul>
 </div>
+
+<hr/>
 
 <a th:href="@{'/people/' + ${person.getId()} + '/edit'}">
     <button>Edit</button>
