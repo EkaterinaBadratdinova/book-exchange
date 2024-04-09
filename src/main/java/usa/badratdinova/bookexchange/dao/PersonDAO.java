@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import usa.badratdinova.bookexchange.models.Book;
 import usa.badratdinova.bookexchange.models.Person;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class PersonDAO {
@@ -36,6 +38,13 @@ public class PersonDAO {
                 new Object[]{surnameNamePatronymic},
                 new BeanPropertyRowMapper<>(Person.class))
                 .stream().findAny();
+    }
+
+    public List<Book> getBooksByPersonId(int id) {
+        return jdbcTemplate.query("SELECT title, author, year FROM Book LEFT JOIN Person ON Book.personId = Person.id WHERE personId = ?",
+                new Object[]{id},
+                new BeanPropertyRowMapper<>(Book.class))
+                .stream().collect(Collectors.toList());
     }
 
     public void save(Person person) {
