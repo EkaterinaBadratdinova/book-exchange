@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "Book")
 public class Book {
@@ -27,14 +29,19 @@ public class Book {
     @Column(name = "year")
     private int year;
 
+    @ManyToOne
+    @JoinColumn(name = "personId", referencedColumnName = "id")
+    private Person person;
+
     public Book() {
 
     }
 
-    public Book(String title, String author, int year) {
+    public Book(String title, String author, int year, Person person) {
         this.title = title;
         this.author = author;
         this.year = year;
+        this.person = person;
     }
 
     public int getId() {
@@ -67,5 +74,26 @@ public class Book {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id == book.id && year == book.year && Objects.equals(title, book.title) && Objects.equals(author, book.author);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, author, year);
     }
 }
