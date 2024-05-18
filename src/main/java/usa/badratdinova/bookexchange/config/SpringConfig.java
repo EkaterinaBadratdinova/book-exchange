@@ -1,6 +1,8 @@
 package usa.badratdinova.bookexchange.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +23,7 @@ import java.util.Properties;
 @EnableWebMvc
 @PropertySource("classpath:hibernate.properties")
 @EnableTransactionManagement
+@EnableAutoConfiguration(exclude = HibernateJpaAutoConfiguration.class)
 public class SpringConfig {
     private final Environment env;
 
@@ -40,11 +43,6 @@ public class SpringConfig {
 
         return dataSource;
     }
-
-//    @Bean
-//    public JdbcTemplate jdbcTemplate() {
-//        return new JdbcTemplate(dataSource());
-//    }
 
     private Properties hibernateProperties() {
         Properties properties = new Properties();
