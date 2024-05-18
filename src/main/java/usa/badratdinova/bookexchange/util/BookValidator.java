@@ -26,9 +26,11 @@ public class BookValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Book book = (Book) o;
-        Book bookFromDatabase = bookDAO.show(book.getTitle());
-        if (bookFromDatabase != null && bookFromDatabase.getId() != book.getId()) {
+        Optional<Book> optionalBookFromDatabase = bookDAO.show(book.getTitle());
+        if (optionalBookFromDatabase.isPresent() && optionalBookFromDatabase.get().getId() != book.getId()) {
             errors.rejectValue("title", "", "Book with this title already exists");
+        }
+        if (optionalBookFromDatabase.isEmpty()) {
         }
     }
 }

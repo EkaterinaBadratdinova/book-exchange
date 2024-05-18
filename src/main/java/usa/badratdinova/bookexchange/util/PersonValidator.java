@@ -27,9 +27,11 @@ public class PersonValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
-        Person personFromDatabase = personDAO.show(person.getSurnameNamePatronymic());
-        if (personFromDatabase != null && personFromDatabase.getId() != person.getId()) {
+        Optional<Person> optionalPersonFromDatabase = personDAO.show(person.getSurnameNamePatronymic());
+        if (optionalPersonFromDatabase.isPresent() && optionalPersonFromDatabase.get().getId() != person.getId()) {
             errors.rejectValue("surnameNamePatronymic", "", "Person with this name already exists");
+        }
+        if (optionalPersonFromDatabase.isEmpty()) {
         }
     }
 }
