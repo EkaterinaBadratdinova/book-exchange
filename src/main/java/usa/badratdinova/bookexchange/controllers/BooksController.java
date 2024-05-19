@@ -10,26 +10,28 @@ import usa.badratdinova.bookexchange.dao.BookDAO;
 import usa.badratdinova.bookexchange.dao.PersonDAO;
 import usa.badratdinova.bookexchange.models.Book;
 import usa.badratdinova.bookexchange.models.Person;
+import usa.badratdinova.bookexchange.services.BooksService;
+import usa.badratdinova.bookexchange.services.PeopleService;
 import usa.badratdinova.bookexchange.util.BookValidator;
 
 @Controller
 @RequestMapping("/books")
 public class BooksController {
 
-    private BookDAO bookDAO;
-    private PersonDAO personDAO;
+    private final BooksService booksService;
+    private final PeopleService peopleService;
     private BookValidator bookValidator;
 
     @Autowired
-    public BooksController(BookDAO bookDAO, PersonDAO personDAO, BookValidator bookValidator) {
-        this.bookDAO = bookDAO;
+    public BooksController(BooksService booksService, PeopleService peopleService, BookValidator bookValidator) {
+        this.booksService = booksService;
+        this.peopleService = peopleService;
         this.bookValidator = bookValidator;
-        this.personDAO = personDAO;
     }
 
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("books", bookDAO.index());
+        model.addAttribute("books", booksService.findAll());
         return "books/index";
     }
 
@@ -37,9 +39,9 @@ public class BooksController {
     public String show(@PathVariable("id") int id,
                        Model model,
                        @ModelAttribute("personToBeChosen") Person person) {
-        model.addAttribute("book", bookDAO.show(id));
-        model.addAttribute("person", bookDAO.getPersonByBookId(id));
-        model.addAttribute("people", personDAO.index());
+        model.addAttribute("book", booksService.findOne(id));
+        model.addAttribute("person", booksService.findPersonByBookId(id));
+        model.addAttribute("people", peopleService.findAll());
         return "books/show";
     }
 
@@ -56,13 +58,13 @@ public class BooksController {
         if (bindingResult.hasErrors()) {
             return "books/new";
         }
-        bookDAO.save(book);
+        booksService.save(book);
         return "redirect:/books";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("book", bookDAO.show(id));
+        model.addAttribute("book", booksService.findOne(id));
         return "books/edit";
     }
 
@@ -74,25 +76,25 @@ public class BooksController {
         if (bindingResult.hasErrors()) {
             return "books/edit";
         }
-        bookDAO.update(id, book);
+        booksService.update(id, book);
         return "redirect:/books";
     }
 
     @PatchMapping("{id}/issue")
     public String issue(@PathVariable("id") int id, @ModelAttribute("personToBeChosen") Person person) {
-        bookDAO.issue(id, person);
+        booksService.issue(id, person);
         return "redirect:/books";
     }
 
     @PatchMapping("{id}/return")
     public String returnBook(@PathVariable("id") int id) {
-        bookDAO.returnBook(id);
+        booksService.returnBook(id);
         return "redirect:/books";
     }
 
     @DeleteMapping("{id}")
     public String delete(@PathVariable("id") int id) {
-        bookDAO.delete(id);
+        booksService.delete(id);
         return "redirect:/books";
     }
 }
