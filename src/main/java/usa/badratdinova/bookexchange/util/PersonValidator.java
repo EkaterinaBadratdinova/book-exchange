@@ -4,19 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import usa.badratdinova.bookexchange.dao.PersonDAO;
 import usa.badratdinova.bookexchange.models.Person;
-
-import java.util.Optional;
+import usa.badratdinova.bookexchange.services.PeopleService;
 
 @Component
 public class PersonValidator implements Validator {
 
-    private final PersonDAO personDAO;
+    private final PeopleService peopleService;
 
     @Autowired
-    public PersonValidator(PersonDAO personDAO) {
-        this.personDAO = personDAO;
+    public PersonValidator(PeopleService peopleService) {
+        this.peopleService = peopleService;
     }
 
     @Override
@@ -27,11 +25,11 @@ public class PersonValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
-        Optional<Person> optionalPersonFromDatabase = personDAO.show(person.getSurnameNamePatronymic());
-        if (optionalPersonFromDatabase.isPresent() && optionalPersonFromDatabase.get().getId() != person.getId()) {
+        Person personFromDatabase = peopleService.findOne(person.getSurnameNamePatronymic());
+        if (personFromDatabase != null && personFromDatabase.getId() != person.getId()) {
             errors.rejectValue("surnameNamePatronymic", "", "Person with this name already exists");
         }
-        if (optionalPersonFromDatabase.isEmpty()) {
+        if (personFromDatabase == null) {
         }
     }
 }

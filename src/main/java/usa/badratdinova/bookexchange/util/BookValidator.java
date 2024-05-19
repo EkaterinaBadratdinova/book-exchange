@@ -6,16 +6,18 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import usa.badratdinova.bookexchange.dao.BookDAO;
 import usa.badratdinova.bookexchange.models.Book;
+import usa.badratdinova.bookexchange.services.BooksService;
 
 import java.util.Optional;
 
 @Component
 public class BookValidator implements Validator {
-    private final BookDAO bookDAO;
+
+    private final BooksService booksService;
 
     @Autowired
-    public BookValidator(BookDAO bookDAO) {
-        this.bookDAO = bookDAO;
+    public BookValidator(BooksService booksService) {
+        this.booksService = booksService;
     }
 
     @Override
@@ -26,11 +28,11 @@ public class BookValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Book book = (Book) o;
-        Optional<Book> optionalBookFromDatabase = bookDAO.show(book.getTitle());
-        if (optionalBookFromDatabase.isPresent() && optionalBookFromDatabase.get().getId() != book.getId()) {
+        Book bookFromDatabase = booksService.findOne(book.getTitle());
+        if (bookFromDatabase != null && bookFromDatabase.getId() != book.getId()) {
             errors.rejectValue("title", "", "Book with this title already exists");
         }
-        if (optionalBookFromDatabase.isEmpty()) {
+        if (bookFromDatabase == null) {
         }
     }
 }
