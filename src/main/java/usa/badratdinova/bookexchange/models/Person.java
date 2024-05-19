@@ -26,7 +26,7 @@ public class Person {
     @Column(name = "yearofbirth")
     private int yearOfBirth;
 
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
     private List<Book> books;
 
     public Person() {
