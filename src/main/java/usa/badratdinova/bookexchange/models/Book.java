@@ -30,7 +30,7 @@ public class Book {
     private int year;
 
     @ManyToOne
-    @JoinColumn(name = "personId", referencedColumnName = "id")
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
 
     public Book() {
