@@ -25,11 +25,15 @@ public class PersonValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
-        Person personFromDatabase = peopleService.findOne(person.getSurnameNamePatronymic());
-        if (personFromDatabase != null && personFromDatabase.getId() != person.getId()) {
+        Person personFromDatabaseName = peopleService.findBySurnameNamePatronymic(person.getSurnameNamePatronymic());
+        if (personFromDatabaseName != null && personFromDatabaseName.getId() != person.getId()) {
             errors.rejectValue("surnameNamePatronymic", "", "Person with this name already exists");
         }
-        if (personFromDatabase == null) {
+        Person personFromDatabaseEmail = peopleService.findByEmail(person.getEmail());
+        if (personFromDatabaseEmail != null && personFromDatabaseEmail.getId() != person.getId()) {
+            errors.rejectValue("email", "", "Person with this email already exists");
+        }
+        if (personFromDatabaseName == null) {
         }
     }
 }
