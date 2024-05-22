@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<p th:text="${person.getSurnameNamePatronymic()} + ', ' + ${person.getYearOfBirth()}">VALUE</p>
+<p th:text="${person.getSurnameNamePatronymic()} + ', ' + ${#dates.format(person.dateOfBirth, 'MM/dd/yyyy')} + ', ' + ${person.getEmail()} + ', ' + ${person.getCreatedAt()}">VALUE</p>
 
 <div th:if="${books.isEmpty()}">
     <p>The person hasn't taken any books yet</p>

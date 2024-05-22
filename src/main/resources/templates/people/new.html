@@ -16,11 +16,18 @@
          th:errors="*{surnameNamePatronymic}">Surname Name Patronymic Error</div>
     <br/>
 
-    <label for="yearOdBirth">Enter your year of birth: </label>
-    <input type="text" th:field="*{yearOfBirth}" id="yearOdBirth"/>
-    <div style="color:red" th:if="${#fields.hasErrors('yearOfBirth')}"
-         th:errors="*{yearOfBirth}">Year of birth Error</div>
+    <label for="dateOfBirth">Enter your date of birth (mm/dd/yyy): </label>
+    <input type="text" th:field="*{dateOfBirth}" id="dateOfBirth"/>
+    <div style="color:red" th:if="${#fields.hasErrors('dateOfBirth')}"
+         th:errors="*{dateOfBirth}">Date of birth Error</div>
     <br/>
+
+    <label for="email">Enter your email: </label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <div style="color:red" th:if="${#fields.hasErrors('email')}"
+         th:errors="*{dateOfBirth}">Email Error</div>
+    <br/>
+
     <hr/>
 
     <input type="submit" value="Create"/>
