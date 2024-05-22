@@ -8,6 +8,7 @@ import usa.badratdinova.bookexchange.models.Person;
 import usa.badratdinova.bookexchange.repositories.BooksRepository;
 import usa.badratdinova.bookexchange.repositories.PeopleRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,8 +35,13 @@ public class PeopleService {
         return foundPerson.orElse(null);
     }
 
-    public Person findOne(String surnameNamePatronymic) {
+    public Person findBySurnameNamePatronymic(String surnameNamePatronymic) {
         Optional<Person> foundPerson = peopleRepository.findBySurnameNamePatronymic(surnameNamePatronymic);
+        return foundPerson.orElse(null);
+    }
+
+    public Person findByEmail(String email) {
+        Optional<Person> foundPerson = peopleRepository.findByEmail(email);
         return foundPerson.orElse(null);
     }
 
@@ -45,13 +51,20 @@ public class PeopleService {
 
     @Transactional
     public void save(Person person) {
+        person.setCreatedAt(new Date());
         peopleRepository.save(person);
     }
 
     @Transactional
     public void update(int id, Person updatedPerson) {
-        updatedPerson.setId(id);
-        peopleRepository.save(updatedPerson);
+        Optional<Person> optionalPersonFromDatabase = peopleRepository.findById(id);
+        if (optionalPersonFromDatabase.isPresent()) {
+            Person personToBeUpdated = optionalPersonFromDatabase.get();
+            personToBeUpdated.setSurnameNamePatronymic(updatedPerson.getSurnameNamePatronymic());
+            personToBeUpdated.setDateOfBirth(updatedPerson.getDateOfBirth());
+            personToBeUpdated.setEmail(updatedPerson.getEmail());
+            peopleRepository.save(personToBeUpdated);
+        }
     }
     @Transactional
     public void delete(int id) {
