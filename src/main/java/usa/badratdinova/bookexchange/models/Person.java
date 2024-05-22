@@ -2,7 +2,9 @@ package usa.badratdinova.bookexchange.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,13 +20,23 @@ public class Person {
     @NotEmpty(message="This field cannot be empty")
     @Pattern(regexp = "[A-Z]\\w+ [A-Z]\\w+ [A-Z]\\w+",
             message="The field should have the format: Surname Name Patronymic")
-    @Column(name = "surnamenamepatronymic")
+    @Column(name = "surname_name_patronymic")
     private String surnameNamePatronymic;
 
-    @Min(value = 1900, message="Year of birth cannot be earlier than 1900")
-    @Max(value = 2024, message = "Year of birth cannot be later than 2024")
-    @Column(name = "yearofbirth")
-    private int yearOfBirth;
+    @Column(name = "date_of_birth")
+    @NotNull(message = "This field cannot be empty")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    private Date dateOfBirth;
+
+    @Column(name = "email")
+    @NotEmpty(message = "This field cannot be empty")
+    @Email
+    private String email;
+
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
     private List<Book> books;
@@ -33,10 +45,10 @@ public class Person {
 
     }
 
-    public Person(String surnameNamePatronymic, int yearOfBirth, List<Book> books) {
+    public Person(String surnameNamePatronymic, Date dateOfBirth, String email) {
         this.surnameNamePatronymic = surnameNamePatronymic;
-        this.yearOfBirth = yearOfBirth;
-        this.books = books;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
     }
 
     public int getId() {
@@ -55,12 +67,28 @@ public class Person {
         this.surnameNamePatronymic = surnameNamePatronymic;
     }
 
-    public int getYearOfBirth() {
-        return yearOfBirth;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setYearOfBirth(int yearOfBirth) {
-        this.yearOfBirth = yearOfBirth;
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public List<Book> getBooks() {
@@ -76,11 +104,14 @@ public class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return id == person.id && yearOfBirth == person.yearOfBirth && Objects.equals(surnameNamePatronymic, person.surnameNamePatronymic);
+        return id == person.id &&
+                Objects.equals(surnameNamePatronymic, person.surnameNamePatronymic) &&
+                Objects.equals(dateOfBirth, person.dateOfBirth) &&
+                Objects.equals(email, person.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, surnameNamePatronymic, yearOfBirth);
+        return Objects.hash(id, surnameNamePatronymic, dateOfBirth, email);
     }
 }
