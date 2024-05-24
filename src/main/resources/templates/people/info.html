@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Information</title>
+</head>
+<body>
+
+<div th:each="person : ${people}">
+    <a th:href="@{/people/{id} (id=${person.getId()})}"
+       th:text="${person.getSurnameNamePatronymic() + ', ' + person.getEmail()}">user</a>
+
+    <div th:if="${person.getBooks().isEmpty()}">
+        <p>Taken books:</p>
+    </div>
+    <div th:if="${!person.getBooks().isEmpty()}">
+        <p>Taken books:</p>
+        <ul>
+            <li th:each="book : ${person.getBooks()}">
+                <a th:href="@{/books/{id} (id=${book.getId()})}"
+                      th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}">
+                </a>
+            </li>
+        </ul>
+        <hr/>
+    </div>
+
+</div>
+
+<hr/>
+<a href="/people/new">
+    <button>Create a new person</button>
+</a>
+
+</body>
+</html>
