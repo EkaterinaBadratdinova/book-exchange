@@ -2,6 +2,10 @@ package usa.badratdinova.bookexchange.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,10 +27,35 @@ public class PeopleController {
         this.personValidator = personValidator;
     }
 
+    //    With pagination and sorting
+    @GetMapping("/pages")
+    public String indexPage(@RequestParam int page,
+                            @RequestParam int peoplePerPage,
+                            @RequestParam(required = false) Boolean sortBySurname,
+                            Model model) {
+        Pageable pageable;
+        if (Boolean.TRUE.equals(sortBySurname)) {
+            pageable = PageRequest.of(page, peoplePerPage, Sort.by("surnameNamePatronymic"));
+        } else {
+            pageable = PageRequest.of(page,peoplePerPage);
+        }
+        Page<Person> peoplePage = peopleService.findAll(pageable);
+        model.addAttribute("peoplePage", peoplePage);
+        model.addAttribute("currentPage", page);
+        return "people/indexPage";
+    }
+
+    //    Without pagination
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("people", peopleService.findAll());
         return "people/index";
+    }
+
+    @GetMapping("/info")
+    public String allData(Model model) {
+        model.addAttribute("people", peopleService.findAllPeopleAndTheirBooks());
+        return "people/info";
     }
 
     @GetMapping("{id}")
