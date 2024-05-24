@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>BooksPage</title>
+</head>
+<body>
+
+<div th:each="book : ${booksPage.content}">
+    <a th:href="@{/books/{id} (id=${book.getId()})}"
+       th:text="${book.getTitle() + ', ' + book.getAuthor()+ ', ' + book.getYear()}">book</a>
+</div>
+<hr/>
+
+<a th:href="@{/books/pages(page=${currentPage}, booksPerPage=${booksPage.size}, sortByTitle=true)}">
+    <button>Sort by title</button>
+</a>
+<br>
+<br>
+<a th:href="@{/books/pages(page=${currentPage}, booksPerPage=${booksPage.size})}">
+    <button>Default order</button>
+</a>
+<hr/>
+
+<div>
+    <span>Page <span th:text="${currentPage + 1}">1</span> of <span th:text="${booksPage.totalPages}">1</span></span>
+    <br>
+    <br>
+
+    <a th:href="@{/books/pages(page=${currentPage - 1}, booksPerPage=${booksPage.size})}"
+       th:if="${booksPage.hasPrevious()}">
+        <button>Previous page</button>
+    </a>
+    <br>
+    <br>
+
+    <a th:href="@{/books/pages(page=${currentPage + 1}, booksPerPage=${booksPage.size})}"
+       th:if="${booksPage.hasNext()}">
+        <button>Next page</button>
+    </a>
+</div>
+<br>
+<hr/>
+
+<a href="/books/new">
+    <button>Create a new book</button>
+</a>
+
+</body>
+</html>

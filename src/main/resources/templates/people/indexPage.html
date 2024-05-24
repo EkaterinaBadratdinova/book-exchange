@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>PeoplePage</title>
+</head>
+<body>
+
+<div th:each="person : ${peoplePage.content}">
+    <a th:href="@{/people/{id} (id=${person.getId()})}"
+       th:text="${person.getSurnameNamePatronymic() + ', ' + #dates.format(person.dateOfBirth, 'MM/dd/yyyy') + ', ' + person.getEmail()}">user</a>
+</div>
+<hr/>
+
+<a th:href="@{/people/pages(page=${currentPage}, peoplePerPage=${peoplePage.size}, sortBySurname=true)}">
+    <button>Sort by surname</button>
+</a>
+<br>
+<br>
+<a th:href="@{/people/pages(page=${currentPage}, peoplePerPage=${peoplePage.size})}">
+    <button>Default order</button>
+</a>
+<hr/>
+
+<div>
+    <span>Page <span th:text="${currentPage + 1}">1</span> of <span th:text="${peoplePage.totalPages}">1</span></span>
+    <br>
+    <br>
+
+    <a th:href="@{/people/pages(page=${currentPage - 1}, peoplePerPage=${peoplePage.size})}"
+       th:if="${peoplePage.hasPrevious()}">
+        <button>Previous page</button>
+    </a>
+    <br>
+    <br>
+
+    <a th:href="@{/people/pages(page=${currentPage + 1}, peoplePerPage=${peoplePage.size})}"
+       th:if="${peoplePage.hasNext()}">
+        <button>Next page</button>
+    </a>
+</div>
+<br>
+<hr/>
+
+<a href="/people/new">
+    <button>Create a new person</button>
+</a>
+
+</body>
+</html>
