@@ -10,6 +10,7 @@ import usa.badratdinova.bookexchange.models.Book;
 import usa.badratdinova.bookexchange.models.Person;
 import usa.badratdinova.bookexchange.repositories.BooksRepository;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +60,7 @@ public class BooksService {
     public void issue(int id, Person person) {
         Optional<Book> issuedBook = booksRepository.findById(id);
         issuedBook.get().setPerson(person);
+        issuedBook.get().setIssuedAt(LocalDate.now());
         booksRepository.save(issuedBook.get());
     }
 
@@ -66,6 +68,7 @@ public class BooksService {
     public void returnBook(int id) {
         Optional<Book> returnedBook = booksRepository.findById(id);
         returnedBook.get().setPerson(null);
+        returnedBook.get().setIssuedAt(null);
     }
 
     @Transactional

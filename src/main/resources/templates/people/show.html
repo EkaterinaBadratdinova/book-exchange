@@ -17,8 +17,10 @@
     <hr/>
     <p>Books:</p>
     <ul>
-        <li th:each="book : ${books}">
+        <li th:each="book : ${books}"
+            th:style="${book.getIsOverdue()} ? 'color: red; font-weight: bold;' : ''">
             <span th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"></span>
+            <span th:if="${book.getIsOverdue()}"> - Overdue</span>
         </li>
     </ul>
 </div>

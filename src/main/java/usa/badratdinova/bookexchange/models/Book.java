@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Entity
@@ -33,15 +36,22 @@ public class Book {
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
 
+    @Column(name = "issued_at")
+    private LocalDate issuedAt;
+
+    @Transient
+    private boolean isOverdue;
+
     public Book() {
 
     }
 
-    public Book(String title, String author, int year, Person person) {
+    public Book(String title, String author, int year, Person person, LocalDate issuedAt) {
         this.title = title;
         this.author = author;
         this.year = year;
         this.person = person;
+        this.issuedAt = issuedAt;
     }
 
     public int getId() {
@@ -82,6 +92,22 @@ public class Book {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public LocalDate getIssuedAt() {
+        return issuedAt;
+    }
+
+    public void setIssuedAt(LocalDate issuedAt) {
+        this.issuedAt = issuedAt;
+    }
+
+    public boolean getIsOverdue() {
+        if (this.issuedAt == null) {
+            return false;
+        }
+        long daysBetween = ChronoUnit.DAYS.between(this.issuedAt, LocalDate.now());
+        return daysBetween > 10;
     }
 
     @Override
