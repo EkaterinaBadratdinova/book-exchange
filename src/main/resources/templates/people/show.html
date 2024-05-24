@@ -8,14 +8,30 @@
 </head>
 <body>
 
-<p th:text="${person.getSurnameNamePatronymic()} + ', ' + ${#dates.format(person.dateOfBirth, 'MM/dd/yyyy')} + ', ' + ${person.getEmail()} + ', ' + ${person.getCreatedAt()}">VALUE</p>
+<p th:style="'color: black; font-weight: bold; text-decoration: underline;'">User information: </p>
+<p>
+    <span th:style="'color: black; font-weight: bold;'">Name: </span>
+    <span th:text="${person.getSurnameNamePatronymic()}"></span>
+</p>
+<p>
+    <span th:style="'color: black; font-weight: bold;'">Date of birth: </span>
+    <span th:text="${#dates.format(person.dateOfBirth, 'MM/dd/yyyy')}"></span>
+</p>
+<p>
+    <span th:style="'color: black; font-weight: bold;'">Email: </span>
+    <span th:text="${person.getEmail()}"></span>
+</p>
+<p>
+    <span th:style="'color: black; font-weight: bold;'">Signed up at: </span>
+    <span th:text="${person.getCreatedAt()}"></span>
+</p>
 
 <div th:if="${books.isEmpty()}">
     <p>The person hasn't taken any books yet</p>
 </div>
 <div th:if="${!books.isEmpty()}">
     <hr/>
-    <p>Books:</p>
+    <p th:style="'color: black; font-weight: bold; text-decoration: underline;'">Books:</p>
     <ul>
         <li th:each="book : ${books}"
             th:style="${book.getIsOverdue()} ? 'color: red; font-weight: bold;' : ''">
