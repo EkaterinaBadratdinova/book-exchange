@@ -16,6 +16,9 @@ public interface PeopleRepository extends JpaRepository<Person, Integer> {
 
     Optional<Person> findByEmail(String email);
 
+    @Query("select p from Person p left join fetch p.books")
+    List<Person> findAllPeopleAndTheirBooks();
+
     @Query("select b from Book b left join fetch b.person p where p.id = ?1")
     List<Book> findBooksByPersonId(int id);
 }
