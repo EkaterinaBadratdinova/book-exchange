@@ -21,4 +21,7 @@ public interface PeopleRepository extends JpaRepository<Person, Integer> {
 
     @Query("select b from Book b left join fetch b.person p where p.id = ?1")
     List<Book> findBooksByPersonId(int id);
+
+    @Query("select p from Person p left join fetch p.books where p.surnameNamePatronymic like :name%")
+    List<Person> findPeopleByName(String name);
 }

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>People search</title>
+</head>
+<body>
+<form th:method="GET" th:action="@{/people/search}">
+    <label for="name">Enter your request: </label>
+    <input type="text" name="name" id="name"/>
+    <input type="hidden" name="searched" value="true"/>
+    <button type="submit">Search</button>
+</form>
+<br/>
+<hr/>
+
+<h2>Search result: </h2>
+<div th:if="${param.searched}">
+    <div th:if="${people.isEmpty()}">
+        <p>There are no people with such name</p>
+    </div>
+    <div th:if="${!people.isEmpty()}">
+        <div th:each="person : ${people}">
+            <p th:text="${person.getSurnameNamePatronymic()} + ', ' + ${person.getEmail()}"></p>
+            <p th:if="${person.getBooks() == null}">The person hasn't taken any books yet.</p>
+            <p th:if="${person.getBooks() != null}">
+            <ul>
+                <li th:each="book : ${person.getBooks()}">
+                    <span th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"></span>
+                </li>
+            </ul>
+            <hr/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -10,9 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import usa.badratdinova.bookexchange.models.Book;
 import usa.badratdinova.bookexchange.models.Person;
 import usa.badratdinova.bookexchange.services.PeopleService;
 import usa.badratdinova.bookexchange.util.PersonValidator;
+
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 @RequestMapping("/people")
@@ -50,6 +54,18 @@ public class PeopleController {
     public String index(Model model) {
         model.addAttribute("people", peopleService.findAll());
         return "people/index";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(required = false) String name,
+                         @RequestParam(required = false) String searched,
+                         Model model) {
+        List<Person> people = Collections.emptyList();
+        if (name != null && !name.isEmpty()) {
+            people = peopleService.findPeopleByName(name);
+        }
+        model.addAttribute("people", people);
+        return "people/search";
     }
 
     @GetMapping("/info")

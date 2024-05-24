@@ -2,7 +2,6 @@ package usa.badratdinova.bookexchange.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +10,7 @@ import usa.badratdinova.bookexchange.models.Person;
 import usa.badratdinova.bookexchange.repositories.BooksRepository;
 import usa.badratdinova.bookexchange.repositories.PeopleRepository;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +39,13 @@ public class PeopleService {
 
     public List<Person> findAllPeopleAndTheirBooks() {
         return peopleRepository.findAllPeopleAndTheirBooks();
+    }
+
+    public List<Person> findPeopleByName(String name) {
+        if (name == null || name.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return peopleRepository.findPeopleByName(name);
     }
 
     public Person findOne(int id) {
