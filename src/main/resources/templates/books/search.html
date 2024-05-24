@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Book search</title>
+</head>
+<body>
+
+<form th:method="GET" th:action="@{/books/search}">
+    <label for="title">Enter your request: </label>
+    <input type="text" name="title" id="title"/>
+    <input type="hidden" name="searched" value="true"/>
+    <button type="submit">Search</button>
+</form>
+<br/>
+<hr/>
+
+<h2>Search result: </h2>
+<div th:if="${param.searched}">
+    <div th:if="${books.isEmpty()}">
+        <p>There are no books with such title</p>
+    </div>
+    <div th:if="${!books.isEmpty()}">
+        <div th:each="book : ${books}">
+            <p th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"></p>
+            <p th:if="${book.getPerson() == null}">The book is available</p>
+            <p th:if="${book.getPerson() != null}"
+               th:text="'The book has been taken by: ' + ${book.getPerson().getSurnameNamePatronymic()}"></p>
+            <hr/>
+        </div>
+    </div>
+</div>
+</body>
+</html>
