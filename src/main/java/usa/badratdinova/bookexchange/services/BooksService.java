@@ -1,12 +1,16 @@
 package usa.badratdinova.bookexchange.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import usa.badratdinova.bookexchange.models.Book;
 import usa.badratdinova.bookexchange.models.Person;
 import usa.badratdinova.bookexchange.repositories.BooksRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +27,17 @@ public class BooksService {
 
     public List<Book> findAll() {
         return booksRepository.findAll();
+    }
+
+    public Page<Book> findAll(Pageable pageable) {
+        return booksRepository.findAll(pageable);
+    }
+
+    public List<Book> findBooksByTitle(String title) {
+        if (title == null || title.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return booksRepository.findBooksByTitle(title);
     }
 
     public Book findOne(int id) {
