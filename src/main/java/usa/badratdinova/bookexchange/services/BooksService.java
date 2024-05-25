@@ -3,7 +3,6 @@ package usa.badratdinova.bookexchange.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import usa.badratdinova.bookexchange.models.Book;
@@ -78,8 +77,14 @@ public class BooksService {
 
     @Transactional
     public void update(int id, Book updatedBook) {
-        updatedBook.setId(id);
-        booksRepository.save(updatedBook);
+        Optional<Book> optionalBook = booksRepository.findById(id);
+        if (optionalBook.isPresent()) {
+            Book bookToBeUpdated = optionalBook.get();
+            bookToBeUpdated.setTitle(updatedBook.getTitle());
+            bookToBeUpdated.setAuthor(updatedBook.getAuthor());
+            bookToBeUpdated.setYear(updatedBook.getYear());
+            booksRepository.save(bookToBeUpdated);
+        }
     }
 
     @Transactional
