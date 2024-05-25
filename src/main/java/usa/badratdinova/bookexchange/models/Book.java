@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -16,7 +15,6 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @NotNull
@@ -38,9 +36,6 @@ public class Book {
 
     @Column(name = "issued_at")
     private LocalDate issuedAt;
-
-    @Transient
-    private boolean isOverdue;
 
     public Book() {
 
@@ -102,7 +97,7 @@ public class Book {
         this.issuedAt = issuedAt;
     }
 
-    public boolean getIsOverdue() {
+    public boolean isOverdue() {
         if (this.issuedAt == null) {
             return false;
         }
