@@ -10,6 +10,8 @@ import usa.badratdinova.bookexchange.models.Person;
 import usa.badratdinova.bookexchange.repositories.BooksRepository;
 import usa.badratdinova.bookexchange.repositories.PeopleRepository;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -64,7 +66,18 @@ public class PeopleService {
     }
 
     public List<Book> findBooksByPersonId(int id) {
-        return peopleRepository.findBooksByPersonId(id);
+        Optional<Person> person = peopleRepository.findById(id);
+        if (person.isPresent()) {
+            person.get().getBooks().forEach(book -> {
+                long daysBetween = ChronoUnit.DAYS.between(book.getIssuedAt(), LocalDate.now());
+                if (daysBetween > 10) {
+                    book.setIsOverdue(true);
+                }
+            });
+            return person.get().getBooks();
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     @Transactional
