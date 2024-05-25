@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Entity
@@ -36,6 +35,9 @@ public class Book {
 
     @Column(name = "issued_at")
     private LocalDate issuedAt;
+
+    @Transient
+    private boolean isOverdue;
 
     public Book() {
 
@@ -97,12 +99,12 @@ public class Book {
         this.issuedAt = issuedAt;
     }
 
-    public boolean isOverdue() {
-        if (this.issuedAt == null) {
-            return false;
-        }
-        long daysBetween = ChronoUnit.DAYS.between(this.issuedAt, LocalDate.now());
-        return daysBetween > 10;
+    public boolean getIsOverdue() {
+        return isOverdue;
+    }
+
+    public void setIsOverdue(boolean isOverdue) {
+        this.isOverdue = isOverdue;
     }
 
     @Override
