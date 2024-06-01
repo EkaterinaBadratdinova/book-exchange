@@ -23,6 +23,20 @@ public class Person {
     @Column(name = "surname_name_patronymic")
     private String surnameNamePatronymic;
 
+    @NotEmpty(message="This field cannot be empty")
+    @Pattern(regexp = "^[A-Za-z0-9]{6,}$",
+            message="This field must contain at least 6 characters, including Latin letters and digits")
+    @Size(min = 6, max = 25)
+    @Column(name = "username")
+    private String username;
+
+    @NotEmpty(message="This field cannot be empty")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[/\\*\\!\\?@%$&:;])[A-Za-z\\d/\\*\\!\\?@%$&:;]{6,}$",
+            message="The field must contain at least 6 characters, including 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 symbol from the set /*!?@%$&:;")
+    @Size(min = 6, max = 25)
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "date_of_birth")
     @NotNull(message = "This field cannot be empty")
     @Temporal(TemporalType.DATE)
@@ -45,8 +59,10 @@ public class Person {
 
     }
 
-    public Person(String surnameNamePatronymic, Date dateOfBirth, String email) {
+    public Person(String surnameNamePatronymic, String username, String password, Date dateOfBirth, String email) {
         this.surnameNamePatronymic = surnameNamePatronymic;
+        this.username = username;
+        this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
     }
@@ -65,6 +81,22 @@ public class Person {
 
     public void setSurnameNamePatronymic(String surnameNamePatronymic) {
         this.surnameNamePatronymic = surnameNamePatronymic;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Date getDateOfBirth() {
