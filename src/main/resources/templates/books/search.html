@@ -25,7 +25,7 @@
             <p th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"></p>
             <p th:if="${book.getPerson() == null}">The book is available</p>
             <p th:if="${book.getPerson() != null}"
-               th:text="'The book has been taken by: ' + ${book.getPerson().getSurnameNamePatronymic()}"></p>
+               th:text="'The book has been taken by: ' + ${book.getPerson().getFirstName()} + ' ' + ${book.getPerson().getLastName()}"></p>
             <hr/>
         </div>
     </div>

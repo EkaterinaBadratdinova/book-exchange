@@ -18,7 +18,7 @@
         <select th:object="${personToBeChosen}" th:field="*{id}" id="personToBeChosen">
             <option th:each="personToBeChosen : ${people}"
                     th:value="${personToBeChosen.getId()}"
-                    th:text="${personToBeChosen.getSurnameNamePatronymic()}">
+                    th:text="${personToBeChosen.getFirstName()} + ' ' + ${personToBeChosen.getLastName()}">
             </option>
         </select>
         <input type="submit" value="Issue">
@@ -26,7 +26,7 @@
 
 </div>
 <div th:if="${person} != null">
-    <p th:text="'The book has been taken by: ' + ${person.getSurnameNamePatronymic()}"></p>
+    <p th:text="'The book has been taken by: ' + ${person.getFirstName()} + ' ' + ${person.getLastName()}"></p>
     <form th:method="PATCH" th:action="@{/books/{id}/return (id=${book.getId()})}">
         <input type="submit" value="Return the book">
     </form>

@@ -35,11 +35,11 @@ public class PeopleController {
     @GetMapping("/pages")
     public String indexPage(@RequestParam int page,
                             @RequestParam int peoplePerPage,
-                            @RequestParam(required = false) Boolean sortBySurname,
+                            @RequestParam(required = false) Boolean sortByFirstName,
                             Model model) {
         Pageable pageable;
-        if (Boolean.TRUE.equals(sortBySurname)) {
-            pageable = PageRequest.of(page, peoplePerPage, Sort.by("surnameNamePatronymic"));
+        if (Boolean.TRUE.equals(sortByFirstName)) {
+            pageable = PageRequest.of(page, peoplePerPage, Sort.by("firstName"));
         } else {
             pageable = PageRequest.of(page,peoplePerPage);
         }

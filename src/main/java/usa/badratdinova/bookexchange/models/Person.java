@@ -61,7 +61,7 @@ public class Person {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Book> books;
 
     public Person() {
