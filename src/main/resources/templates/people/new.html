@@ -10,10 +10,28 @@
 
 <form th:method="POST" th:action="@{/people}" th:object="${person}">
 
-    <label for="surnameNamePatronymic">Enter your Surname Name Patronymic: </label>
-    <input type="text" th:field="*{surnameNamePatronymic}" id="surnameNamePatronymic"/>
-    <div style="color:red" th:if="${#fields.hasErrors('surnameNamePatronymic')}"
-         th:errors="*{surnameNamePatronymic}">Surname Name Patronymic Error</div>
+    <label for="firstName">Enter your first name: </label>
+    <input type="text" th:field="*{firstName}" id="firstName"/>
+    <div style="color:red" th:if="${#fields.hasErrors('firstName')}"
+         th:errors="*{firstName}">First name Error</div>
+    <br/>
+
+    <label for="lastName">Enter your last name: </label>
+    <input type="text" th:field="*{lastName}" id="lastName"/>
+    <div style="color:red" th:if="${#fields.hasErrors('lastName')}"
+         th:errors="*{lastName}">Last name Error</div>
+    <br/>
+
+    <label for="username">Enter your username: </label>
+    <input type="text" th:field="*{username}" id="username"/>
+    <div style="color:red" th:if="${#fields.hasErrors('username')}"
+         th:errors="*{username}">Username Error</div>
+    <br/>
+
+    <label for="password">Enter your password: </label>
+    <input type="text" th:field="*{password}" id="password"/>
+    <div style="color:red" th:if="${#fields.hasErrors('password')}"
+         th:errors="*{password}">Password Error</div>
     <br/>
 
     <label for="dateOfBirth">Enter your date of birth (mm/dd/yyy): </label>

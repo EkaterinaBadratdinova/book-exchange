@@ -21,7 +21,7 @@
     </div>
     <div th:if="${!people.isEmpty()}">
         <div th:each="person : ${people}">
-            <p th:text="${person.getSurnameNamePatronymic()} + ', ' + ${person.getEmail()}"></p>
+            <p th:text="${person.getFirstName()} + ', ' + ${person.getLastName()} + ', ' + ${person.getEmail()}"></p>
             <p th:if="${person.getBooks() == null}">The person hasn't taken any books yet.</p>
             <p th:if="${person.getBooks() != null}">
             <ul>

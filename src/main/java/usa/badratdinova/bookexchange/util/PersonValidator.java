@@ -25,9 +25,9 @@ public class PersonValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
-        Person personFromDatabaseName = peopleService.findBySurnameNamePatronymic(person.getSurnameNamePatronymic());
+        Person personFromDatabaseName = peopleService.findByUsername(person.getUsername());
         if (personFromDatabaseName != null && personFromDatabaseName.getId() != person.getId()) {
-            errors.rejectValue("surnameNamePatronymic", "", "Person with this name already exists");
+            errors.rejectValue("username", "", "Person with this username already exists");
         }
         Person personFromDatabaseEmail = peopleService.findByEmail(person.getEmail());
         if (personFromDatabaseEmail != null && personFromDatabaseEmail.getId() != person.getId()) {

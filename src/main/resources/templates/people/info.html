@@ -10,7 +10,7 @@
 
 <div th:each="person : ${people}">
     <a th:href="@{/people/{id} (id=${person.getId()})}"
-       th:text="${person.getSurnameNamePatronymic() + ', ' + person.getEmail()}">user</a>
+       th:text="${person.getFirstName() + ', ' + person.getLastName() + ', ' + person.getEmail()}">user</a>
 
     <div th:if="${person.getBooks().isEmpty()}">
         <p>Taken books:</p>

@@ -2,23 +2,23 @@ package usa.badratdinova.bookexchange.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import usa.badratdinova.bookexchange.models.Book;
 import usa.badratdinova.bookexchange.models.Person;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PeopleRepository extends JpaRepository<Person, Integer> {
+public interface PeopleRepository extends JpaRepository<Person, Long> {
 
-    Optional<Person> findBySurnameNamePatronymic(String surnameNamePatronymic);
+    Optional<Person> findByUsername(String username);
 
     Optional<Person> findByEmail(String email);
 
-    @Query("select p from Person p left join fetch p.books")
+    @Query("SELECT p FROM Person p LEFT JOIN FETCH p.books")
     List<Person> findAllPeopleAndTheirBooks();
 
-    @Query("select p from Person p left join fetch p.books where p.surnameNamePatronymic like :name%")
-    List<Person> findPeopleByName(String name);
+    @Query("SELECT p FROM Person p WHERE p.firstName LIKE CONCAT(:name, '%') OR p.lastName LIKE CONCAT(:name, '%')")
+    List<Person> findByFirstNameStartingWithOrLastNameStartingWith(@Param("name") String name);
 }

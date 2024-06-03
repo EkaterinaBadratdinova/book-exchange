@@ -11,9 +11,9 @@ import usa.badratdinova.bookexchange.repositories.BooksRepository;
 import usa.badratdinova.bookexchange.repositories.PeopleRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,16 +47,16 @@ public class PeopleService {
         if (name == null || name.isEmpty()) {
             return Collections.emptyList();
         }
-        return peopleRepository.findPeopleByName(name);
+        return peopleRepository.findByFirstNameStartingWithOrLastNameStartingWith(name);
     }
 
-    public Person findOne(int id) {
+    public Person findOne(Long id) {
         Optional<Person> foundPerson = peopleRepository.findById(id);
         return foundPerson.orElse(null);
     }
 
-    public Person findBySurnameNamePatronymic(String surnameNamePatronymic) {
-        Optional<Person> foundPerson = peopleRepository.findBySurnameNamePatronymic(surnameNamePatronymic);
+    public Person findByUsername(String username) {
+        Optional<Person> foundPerson = peopleRepository.findByUsername(username);
         return foundPerson.orElse(null);
     }
 
@@ -65,7 +65,7 @@ public class PeopleService {
         return foundPerson.orElse(null);
     }
 
-    public List<Book> findBooksByPersonId(int id) {
+    public List<Book> findBooksByPersonId(Long id) {
         Optional<Person> person = peopleRepository.findById(id);
         if (person.isPresent()) {
             person.get().getBooks().forEach(book -> {
@@ -82,23 +82,26 @@ public class PeopleService {
 
     @Transactional
     public void save(Person person) {
-        person.setCreatedAt(new Date());
+        person.setCreatedAt(LocalDateTime.now());
         peopleRepository.save(person);
     }
 
     @Transactional
-    public void update(int id, Person updatedPerson) {
+    public void update(Long id, Person updatedPerson) {
         Optional<Person> optionalPersonFromDatabase = peopleRepository.findById(id);
         if (optionalPersonFromDatabase.isPresent()) {
             Person personToBeUpdated = optionalPersonFromDatabase.get();
-            personToBeUpdated.setSurnameNamePatronymic(updatedPerson.getSurnameNamePatronymic());
+            personToBeUpdated.setFirstName(updatedPerson.getFirstName());
+            personToBeUpdated.setLastName(updatedPerson.getLastName());
+            personToBeUpdated.setUsername(updatedPerson.getUsername());
+            personToBeUpdated.setPassword(updatedPerson.getPassword());
             personToBeUpdated.setDateOfBirth(updatedPerson.getDateOfBirth());
             personToBeUpdated.setEmail(updatedPerson.getEmail());
             peopleRepository.save(personToBeUpdated);
         }
     }
     @Transactional
-    public void delete(int id) {
+    public void delete(Long id) {
         Optional<Person> personToDelete = peopleRepository.findById(id);
         if (personToDelete.isPresent() && personToDelete.get().getBooks() != null) {
             for (Book book : personToDelete.get().getBooks()) {

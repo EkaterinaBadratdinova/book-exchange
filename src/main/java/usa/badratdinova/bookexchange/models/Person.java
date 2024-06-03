@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,13 +16,21 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @NotEmpty(message="This field cannot be empty")
-    @Pattern(regexp = "[A-Z]\\w+ [A-Z]\\w+ [A-Z]\\w+",
-            message="The field should have the format: Surname Name Patronymic")
-    @Column(name = "surname_name_patronymic")
-    private String surnameNamePatronymic;
+    @Pattern(regexp = "^[A-Z][a-z]+$",
+            message="The field should have the format: Firstname")
+    @Size(min = 1, max = 20)
+    @Column(name = "first_name")
+    private String firstName;
+
+    @NotEmpty(message="This field cannot be empty")
+    @Pattern(regexp = "^[A-Z][a-z]+$",
+            message="The field should have the format: Lastname")
+    @Size(min = 1, max = 20)
+    @Column(name = "last_name")
+    private String lastName;
 
     @NotEmpty(message="This field cannot be empty")
     @Pattern(regexp = "^[A-Za-z0-9]{6,}$",
@@ -37,20 +46,20 @@ public class Person {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "date_of_birth")
     @NotNull(message = "This field cannot be empty")
-    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "MM/dd/yyyy")
-    private Date dateOfBirth;
+    @Past(message = "The date of birth must be in the past")
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
 
-    @Column(name = "email")
     @NotEmpty(message = "This field cannot be empty")
     @Email
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
     private List<Book> books;
@@ -59,28 +68,37 @@ public class Person {
 
     }
 
-    public Person(String surnameNamePatronymic, String username, String password, Date dateOfBirth, String email) {
-        this.surnameNamePatronymic = surnameNamePatronymic;
+    public Person(String firstName, String lastName, String username, String password, LocalDate dateOfBirth, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getSurnameNamePatronymic() {
-        return surnameNamePatronymic;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setSurnameNamePatronymic(String surnameNamePatronymic) {
-        this.surnameNamePatronymic = surnameNamePatronymic;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getUsername() {
@@ -99,11 +117,11 @@ public class Person {
         this.password = password;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -115,11 +133,11 @@ public class Person {
         this.email = email;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -136,14 +154,16 @@ public class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return id == person.id &&
-                Objects.equals(surnameNamePatronymic, person.surnameNamePatronymic) &&
+        return Objects.equals(firstName, person.firstName) &&
+                Objects.equals(lastName, person.lastName) &&
+                Objects.equals(username, person.username) &&
+                Objects.equals(password, person.password) &&
                 Objects.equals(dateOfBirth, person.dateOfBirth) &&
                 Objects.equals(email, person.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, surnameNamePatronymic, dateOfBirth, email);
+        return Objects.hash(firstName, lastName, username, password, dateOfBirth, email);
     }
 }

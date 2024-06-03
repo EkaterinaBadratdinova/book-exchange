@@ -10,12 +10,20 @@
 
 <p th:style="'color: black; font-weight: bold; text-decoration: underline;'">User information: </p>
 <p>
-    <span th:style="'color: black; font-weight: bold;'">Name: </span>
-    <span th:text="${person.getSurnameNamePatronymic()}"></span>
+    <span th:style="'color: black; font-weight: bold;'">First name: </span>
+    <span th:text="${person.getFirstName()}"></span>
+</p>
+<p>
+    <span th:style="'color: black; font-weight: bold;'">Last name: </span>
+    <span th:text="${person.getLastName()}"></span>
+</p>
+<p>
+    <span th:style="'color: black; font-weight: bold;'">Username: </span>
+    <span th:text="${person.getUsername()}"></span>
 </p>
 <p>
     <span th:style="'color: black; font-weight: bold;'">Date of birth: </span>
-    <span th:text="${#dates.format(person.dateOfBirth, 'MM/dd/yyyy')}"></span>
+    <span th:text="${person.getDateOfBirth()}"></span>
 </p>
 <p>
     <span th:style="'color: black; font-weight: bold;'">Email: </span>
