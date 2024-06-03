@@ -72,7 +72,7 @@ public class BooksController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id,
+    public String show(@PathVariable("id") Long id,
                        Model model,
                        @ModelAttribute("personToBeChosen") Person person) {
         model.addAttribute("book", booksService.findOne(id));
@@ -99,14 +99,14 @@ public class BooksController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public String edit(Model model, @PathVariable("id") Long id) {
         model.addAttribute("book", booksService.findOne(id));
         return "books/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult,
-                         @PathVariable("id") int id) {
+                         @PathVariable("id") Long id) {
         bookValidator.validate(book, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -117,19 +117,19 @@ public class BooksController {
     }
 
     @PatchMapping("{id}/issue")
-    public String issue(@PathVariable("id") int id, @ModelAttribute("personToBeChosen") Person person) {
+    public String issue(@PathVariable("id") Long id, @ModelAttribute("personToBeChosen") Person person) {
         booksService.issue(id, person);
         return "redirect:/books";
     }
 
     @PatchMapping("{id}/return")
-    public String returnBook(@PathVariable("id") int id) {
+    public String returnBook(@PathVariable("id") Long id) {
         booksService.returnBook(id);
         return "redirect:/books";
     }
 
     @DeleteMapping("{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") Long id) {
         booksService.delete(id);
         return "redirect:/books";
     }

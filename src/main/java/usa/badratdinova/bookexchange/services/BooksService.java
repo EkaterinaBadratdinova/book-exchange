@@ -40,7 +40,7 @@ public class BooksService {
         return booksRepository.findBooksByTitle(title);
     }
 
-    public Book findOne(int id) {
+    public Book findOne(Long id) {
         Optional<Book> foundBook = booksRepository.findById(id);
         return foundBook.orElse(null);
     }
@@ -50,13 +50,13 @@ public class BooksService {
         return foundBook.orElse(null);
     }
 
-    public Person findPersonByBookId(int id) {
+    public Person findPersonByBookId(Long id) {
         Optional<Person> foundPerson = booksRepository.findPersonByBookId(id);
         return foundPerson.orElse(null);
     }
 
     @Transactional
-    public void issue(int id, Person person) {
+    public void issue(Long id, Person person) {
         Optional<Book> issuedBook = booksRepository.findById(id);
         issuedBook.get().setPerson(person);
         issuedBook.get().setIssuedAt(LocalDate.now());
@@ -64,7 +64,7 @@ public class BooksService {
     }
 
     @Transactional
-    public void returnBook(int id) {
+    public void returnBook(Long id) {
         Optional<Book> returnedBook = booksRepository.findById(id);
         returnedBook.get().setPerson(null);
         returnedBook.get().setIssuedAt(null);
@@ -76,7 +76,7 @@ public class BooksService {
     }
 
     @Transactional
-    public void update(int id, Book updatedBook) {
+    public void update(Long id, Book updatedBook) {
         Optional<Book> optionalBook = booksRepository.findById(id);
         if (optionalBook.isPresent()) {
             Book bookToBeUpdated = optionalBook.get();
@@ -88,7 +88,7 @@ public class BooksService {
     }
 
     @Transactional
-    public void delete(int id) {
+    public void delete(Long id) {
         booksRepository.deleteById(id);
     }
 }
